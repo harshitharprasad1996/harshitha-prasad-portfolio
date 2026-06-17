@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harshitha Prasad — Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0A0F1E;
+    --navy-mid: #111827;
+    --navy-card: #151D2E;
+    --navy-border: #1E2A40;
+    --teal: #00D4C8;
+    --teal-dim: rgba(0,212,200,0.12);
+    --teal-glow: rgba(0,212,200,0.25);
+    --white: #F8F9FF;
+    --slate: #8892A4;
+    --slate-light: #B0BAC9;
+    --font-display: 'Sora', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 3rem;
+    background: rgba(10,15,30,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--navy-border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 1.05rem;
+    color: var(--teal); letter-spacing: 0.04em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--slate-light); text-decoration: none;
+    font-size: 0.875rem; font-weight: 500; letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 7rem 3rem 4rem;
+  }
+  #pipeline-canvas {
+    position: absolute; inset: 0;
+    opacity: 0.35;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 760px;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem; color: var(--teal);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+    font-weight: 300; color: var(--slate-light);
+    margin-bottom: 1.8rem;
+  }
+  .hero-title span { color: var(--teal); font-weight: 500; }
+  .hero-summary {
+    font-size: 1rem; color: var(--slate-light);
+    max-width: 580px; line-height: 1.75;
+    margin-bottom: 2.4rem;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn-primary {
+    background: var(--teal); color: var(--navy);
+    padding: 0.75rem 1.8rem; border-radius: 4px;
+    text-decoration: none; font-weight: 700;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-ghost {
+    border: 1px solid var(--navy-border); color: var(--slate-light);
+    padding: 0.75rem 1.8rem; border-radius: 4px;
+    text-decoration: none; font-weight: 500;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+  .btn-resume {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--teal); color: var(--teal);
+    padding: 0.75rem 1.4rem; border-radius: 4px;
+    text-decoration: none; font-weight: 600;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+  }
+  .btn-resume:hover { background: var(--teal-dim); }
+  .btn-resume svg { width: 16px; height: 16px; flex-shrink: 0; }
+  /* Nav resume icon button */
+  .nav-resume {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    background: var(--teal); color: var(--navy);
+    padding: 0.45rem 1rem; border-radius: 4px;
+    text-decoration: none; font-weight: 700;
+    font-size: 0.8rem; letter-spacing: 0.04em;
+    transition: opacity 0.2s;
+    margin-left: 0.5rem;
+  }
+  .nav-resume:hover { opacity: 0.85; }
+  .nav-resume svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── METRICS STRIP ── */
+  #metrics {
+    background: var(--navy-card);
+    border-top: 1px solid var(--navy-border);
+    border-bottom: 1px solid var(--navy-border);
+    padding: 2.5rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .metric {
+    text-align: center;
+  }
+  .metric-value {
+    font-family: var(--font-display);
+    font-size: 2.4rem; font-weight: 800;
+    color: var(--teal); line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .metric-label {
+    font-size: 0.8rem; color: var(--slate);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 3rem; max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem; color: var(--teal);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 2rem; font-weight: 700;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-list { display: flex; flex-direction: column; gap: 2rem; }
+  .exp-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px; padding: 2rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .exp-card:hover { border-color: var(--teal); }
+  .exp-card::before {
+    content: '';
+    position: absolute; left: 0; top: 1.5rem; bottom: 1.5rem;
+    width: 3px; background: var(--teal);
+    border-radius: 0 2px 2px 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .exp-card:hover::before { opacity: 1; }
+  .exp-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+  .exp-role {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 1.1rem;
+  }
+  .exp-period {
+    font-family: var(--font-mono);
+    font-size: 0.78rem; color: var(--teal);
+    background: var(--teal-dim);
+    padding: 0.25rem 0.7rem; border-radius: 20px;
+    white-space: nowrap;
+  }
+  .exp-company {
+    color: var(--slate-light); font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .exp-bullets li {
+    color: var(--slate-light); font-size: 0.9rem;
+    padding-left: 1.2rem; position: relative; line-height: 1.6;
+  }
+  .exp-bullets li::before {
+    content: '→'; color: var(--teal);
+    position: absolute; left: 0; font-size: 0.8rem;
+    top: 0.08em;
+  }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem; color: var(--slate);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--navy-border);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .skill-group {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px; padding: 1.4rem;
+  }
+  .skill-group-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem; color: var(--teal);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .pill {
+    font-size: 0.8rem; color: var(--slate-light);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--navy-border);
+    padding: 0.28rem 0.7rem; border-radius: 20px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .pill:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── CERTS ── */
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .cert-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px; padding: 1.2rem 1.4rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .cert-icon {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: var(--teal-dim);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1rem;
+  }
+  .cert-name {
+    font-size: 0.87rem; font-weight: 600;
+    margin-bottom: 0.2rem; line-height: 1.35;
+  }
+  .cert-issuer { font-size: 0.77rem; color: var(--slate); }
+
+  /* ── RESEARCH ── */
+  .research-card {
+    background: var(--navy-card);
+    border: 1px solid var(--teal);
+    border-radius: 8px; padding: 2rem;
+    position: relative; overflow: hidden;
+  }
+  .research-card::after {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 180px; height: 180px;
+    background: var(--teal-glow);
+    border-radius: 50%; filter: blur(60px);
+    pointer-events: none;
+  }
+  .research-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem; color: var(--teal);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+  .research-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 0.8rem; line-height: 1.4;
+  }
+  .research-desc {
+    font-size: 0.9rem; color: var(--slate-light);
+    line-height: 1.7; margin-bottom: 1.2rem;
+  }
+  .research-stats {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .research-stat {
+    text-align: center;
+    background: var(--teal-dim);
+    border-radius: 6px; padding: 0.5rem 0.9rem;
+  }
+  .research-stat-val {
+    font-family: var(--font-display);
+    font-size: 1.1rem; font-weight: 700; color: var(--teal);
+  }
+  .research-stat-label {
+    font-size: 0.7rem; color: var(--slate); text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .research-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    color: var(--teal); text-decoration: none;
+    font-size: 0.87rem; font-weight: 600;
+    transition: opacity 0.2s;
+  }
+  .research-link:hover { opacity: 0.75; }
+
+  /* ── EDUCATION ── */
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .edu-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px; padding: 1.6rem;
+  }
+  .edu-degree {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  .edu-school { color: var(--teal); font-size: 0.9rem; margin-bottom: 0.2rem; }
+  .edu-detail { color: var(--slate); font-size: 0.82rem; }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--navy-card);
+    border-top: 1px solid var(--navy-border);
+    padding: 4rem 3rem;
+    text-align: center;
+  }
+  #contact h2 {
+    font-family: var(--font-display);
+    font-size: 1.8rem; font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  #contact p { color: var(--slate-light); margin-bottom: 2rem; }
+  .contact-links { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--slate-light); text-decoration: none;
+    border: 1px solid var(--navy-border);
+    padding: 0.65rem 1.4rem; border-radius: 4px;
+    font-size: 0.87rem; font-weight: 500;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-link:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--slate);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--navy-border);
+  }
+
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #hero { padding: 6rem 1.5rem 3rem; }
+    section { padding: 3.5rem 1.5rem; }
+    #metrics { grid-template-columns: repeat(2, 1fr); padding: 2rem 1.5rem; }
+    .edu-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">HP</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="HarshithaPrasad_FinanceDataEngineer_Apple.pdf" download="HarshithaPrasad_Resume.pdf" class="nav-resume" title="Download Resume">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Resume
+  </a>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="max-width:100%; padding-top:7rem; padding-bottom:4rem;">
+  <canvas id="pipeline-canvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-eyebrow">// Finance Data Engineer · Dallas, TX</p>
+    <h1 class="hero-name">Harshitha<br>Prasad</h1>
+    <p class="hero-title">Building pipelines that <span>power financial decisions</span></p>
+    <p class="hero-summary">
+      Finance Data Engineer with 5+ years of experience designing data interfaces, pipelines, and data products that power
+      financial reporting, analytics, and business decision-making. Strong proficiency in Python, SQL, and RESTful API integrations —
+      delivering reliable, accurate data solutions aligned to finance business processes. MS in Computer Science from Kent State University.
+      IEEE-published researcher.
+    </p>
+    <div class="hero-cta">
+      <a href="#experience" class="btn-primary">View My Work</a>
+      <a href="mailto:harshitharprasad1996@gmail.com" class="btn-ghost">Get In Touch</a>
+      <a href="HarshithaPrasad_FinanceDataEngineer_Apple.pdf" download="HarshithaPrasad_Resume.pdf" class="btn-resume" title="Download Resume PDF">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+        Download Resume
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div id="metrics">
+  <div class="metric">
+    <div class="metric-value">5+</div>
+    <div class="metric-label">Years Experience</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">50%</div>
+    <div class="metric-label">Pipeline Performance Gain</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">30%</div>
+    <div class="metric-label">Failure Rate Reduction</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">92%</div>
+    <div class="metric-label">Research Accuracy (IEEE)</div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-eyebrow">// Professional Experience</p>
+  <h2 class="section-title">Where I've Worked</h2>
+  <div class="exp-list">
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <span class="exp-role">Data Engineer</span>
+        <span class="exp-period">Feb 2023 – May 2026</span>
+      </div>
+      <div class="exp-company">Pinnacle Group · Dallas, TX &nbsp;|&nbsp; Clients: Amazon, Regions Bank, AT&T</div>
+      <ul class="exp-bullets">
+        <li>Worked cross-functionally with business users, data scientists, software engineers, and IS&T teams to identify, capture, collect, load, and format financial data from external sources, internal systems, and enterprise data warehouses — delivering reliable, accurate, and architecturally sound data interfaces and pipelines for enterprise clients including Amazon, Regions Bank, and AT&T.</li>
+        <li>Designed, built, and maintained data pipelines and ingestion processes using Python, SQL, SSIS, and Azure Data Factory — developing, testing, deploying, monitoring, and troubleshooting feature-ready datasets for downstream analytics and reporting.</li>
+        <li>Developed and maintained RESTful API integrations for data ingestion and exchange — handling authentication, schema parsing, and payload manipulation to operationalize data flows across enterprise platforms.</li>
+        <li>Built and optimized ETL/ELT pipelines on AWS (S3, Glue, Redshift) and Snowflake — delivering cloud-native data solutions for finance teams, improving pipeline performance by <strong>50%</strong> and reducing failures by <strong>30%</strong>.</li>
+        <li>Led migration of on-premise financial data systems to AWS cloud infrastructure — re-engineering pipelines, schemas, and data interfaces to align with modern lakehouse and cloud-first architecture.</li>
+        <li>Ensured data quality and validation in every pipeline — implementing automated testing, monitoring, alerting, and CDC processes to maintain data accuracy and integrity across all financial data workflows.</li>
+        <li>Used Python to automate data workflows, reduce manual processing, and implement data and automation services via RESTful interfaces across enterprise data platforms.</li>
+        <li>Contributed to technical documentation, code repositories, and CI/CD pipelines using Git and Azure DevOps — maintaining version control and deployment integrity across development and production environments.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="tag">Python</span><span class="tag">REST APIs</span><span class="tag">AWS S3</span>
+        <span class="tag">Redshift</span><span class="tag">Glue</span><span class="tag">Snowflake</span>
+        <span class="tag">Azure Data Factory</span><span class="tag">SSIS</span><span class="tag">SQL</span>
+        <span class="tag">CDC</span><span class="tag">Git</span><span class="tag">CI/CD</span><span class="tag">Agile</span>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <span class="exp-role">Data Analyst</span>
+        <span class="exp-period">Nov 2021 – Feb 2023</span>
+      </div>
+      <div class="exp-company">Tata Consultancy Services · Cleveland, OH &nbsp;|&nbsp; Client: Pentagon Federal Credit Union</div>
+      <ul class="exp-bullets">
+        <li>Worked with business users and data teams to identify, capture, and load financial data from multiple internal and external sources into the enterprise data warehouse for Pentagon Federal Credit Union — supporting M&A data integration and downstream analytics.</li>
+        <li>Developed, tested, and maintained ETL/ELT workflows using Python, SQL, and SSIS — delivering feature-ready datasets for financial reporting, analytics, and business decision-making.</li>
+        <li>Applied data quality and validation processes across all pipelines — ensuring accuracy, completeness, and consistency of financial data for downstream reporting and analytics teams.</li>
+        <li>Used Python for programmatic data analysis, anomaly investigation, and validation of large financial datasets — connecting findings back to business questions and supporting data-driven decisions.</li>
+        <li>Collaborated with data scientists, engineers, and business stakeholders to translate finance use cases into data requirements and scalable pipeline solutions.</li>
+        <li>Developed Power BI and Tableau dashboards to surface validated financial datasets as actionable insights for business leaders and cross-functional stakeholders.</li>
+        <li>Maintained technical documentation for data transformation logic, pipeline architecture, and business rules to support governance and team knowledge sharing.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="tag">Python</span><span class="tag">SQL Server</span><span class="tag">MySQL</span>
+        <span class="tag">SSIS</span><span class="tag">ETL/ELT</span><span class="tag">Power BI</span>
+        <span class="tag">Tableau</span><span class="tag">Data Quality</span><span class="tag">M&A Integration</span>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <span class="exp-role">Project Engineer</span>
+        <span class="exp-period">Aug 2018 – Jul 2019</span>
+      </div>
+      <div class="exp-company">Wipro Technologies · Bangalore, India &nbsp;|&nbsp; Client: Cisco Systems</div>
+      <ul class="exp-bullets">
+        <li>Developed SQL queries, stored procedures, and database views supporting enterprise data analysis and reporting for production systems.</li>
+        <li>Analyzed performance metrics; identified pipeline and database optimization opportunities to improve system efficiency.</li>
+        <li>Collaborated with business and technical teams on data integration, reporting requirements, and production support activities.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="tag">SQL</span><span class="tag">Stored Procedures</span>
+        <span class="tag">Data Analysis</span><span class="tag">Production Support</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" style="background: var(--navy-card); max-width:100%; border-top:1px solid var(--navy-border); border-bottom:1px solid var(--navy-border);">
+  <div style="max-width:1100px; margin:0 auto;">
+    <p class="section-eyebrow">// Technical Skills</p>
+    <h2 class="section-title">What I Work With</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">Programming & Scripting</div>
+        <div class="skill-pills">
+          <span class="pill">Python</span><span class="pill">SQL</span>
+          <span class="pill">T-SQL</span><span class="pill">PySpark</span>
+          <span class="pill">RESTful API Development</span><span class="pill">Shell Scripting</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Data Pipelines & ETL/ELT</div>
+        <div class="skill-pills">
+          <span class="pill">ETL/ELT Design</span><span class="pill">Azure Data Factory</span>
+          <span class="pill">SSIS</span><span class="pill">Airflow</span>
+          <span class="pill">DBT</span><span class="pill">Informatica</span><span class="pill">CDC</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Cloud & Data Platforms</div>
+        <div class="skill-pills">
+          <span class="pill">AWS S3</span><span class="pill">Redshift</span>
+          <span class="pill">Glue</span><span class="pill">Lambda</span>
+          <span class="pill">Snowflake</span><span class="pill">Azure</span>
+          <span class="pill">GCP</span><span class="pill">Lakehouse</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Data Warehousing & Modeling</div>
+        <div class="skill-pills">
+          <span class="pill">Enterprise Data Warehousing</span>
+          <span class="pill">Dimensional Modeling</span><span class="pill">Schema Design</span>
+          <span class="pill">SQL Server</span><span class="pill">MySQL</span><span class="pill">PostgreSQL</span>
+          <span class="pill">Feature-Ready Datasets</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Data Quality & Governance</div>
+        <div class="skill-pills">
+          <span class="pill">Data Quality & Validation</span><span class="pill">Data Testing</span>
+          <span class="pill">Pipeline Monitoring</span><span class="pill">Alerting</span>
+          <span class="pill">Data Governance</span><span class="pill">Data Integrity</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">DevOps & CI/CD</div>
+        <div class="skill-pills">
+          <span class="pill">Git</span><span class="pill">CI/CD (Jenkins)</span>
+          <span class="pill">Azure DevOps</span><span class="pill">Version Control</span>
+          <span class="pill">Agile/Scrum</span><span class="pill">SDLC</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">BI & Reporting</div>
+        <div class="skill-pills">
+          <span class="pill">Tableau</span><span class="pill">Power BI</span>
+          <span class="pill">Amazon QuickSight</span>
+          <span class="pill">Advanced Excel</span><span class="pill">Power Query</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">AI Tools</div>
+        <div class="skill-pills">
+          <span class="pill">Claude (Anthropic)</span><span class="pill">ChatGPT</span>
+          <span class="pill">Code Generation</span><span class="pill">Data Analysis</span>
+          <span class="pill">Documentation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <p class="section-eyebrow">// Certifications</p>
+  <h2 class="section-title">Credentials</h2>
+  <div class="certs-grid">
+    <div class="cert-card">
+      <div class="cert-icon">🤖</div>
+      <div>
+        <div class="cert-name">Introduction to AI Agents</div>
+        <div class="cert-issuer">Google · DataCamp · Jun 2026</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">☁️</div>
+      <div>
+        <div class="cert-name">Understanding Microsoft Azure</div>
+        <div class="cert-issuer">DataCamp · Jun 2026</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">📊</div>
+      <div>
+        <div class="cert-name">Introduction to Business Analytics</div>
+        <div class="cert-issuer">Tableau · Coursera · Jun 2026</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🗄️</div>
+      <div>
+        <div class="cert-name">Learn MSBI, SSIS, SSRS & SSAS</div>
+        <div class="cert-issuer">Udemy · Jul 2022</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <p class="section-eyebrow">// Research & Publications</p>
+  <h2 class="section-title">IEEE Publication</h2>
+  <div class="research-card">
+    <div class="research-label">Third IEEE International Conference (RTEICT) · 2020</div>
+    <div class="research-title">A Novel Approach to Detect Acute Lymphoblastic Leukemia</div>
+    <div class="research-desc">
+      Proposed and implemented an automated image processing pipeline in MATLAB for early-stage detection of 
+      Acute Lymphoblastic Leukemia (ALL) using digital blood smear images from the ALL-IDB dataset (University of Milano, Italy). 
+      The system applied colour-based thresholding for white blood cell detection, L*a*b colour space segmentation to isolate 
+      nuclei and cytoplasm, and Watershed Transform algorithms to separate adjoining cells. Lymphoblasts were identified by 
+      computing nucleus roundness and area thresholds — flagging ALL-positive cases when two or more lymphoblasts were detected.
+    </div>
+    <div class="research-stats">
+      <div class="research-stat">
+        <div class="research-stat-val">92.15%</div>
+        <div class="research-stat-label">Accuracy</div>
+      </div>
+      <div class="research-stat">
+        <div class="research-stat-val">96.92%</div>
+        <div class="research-stat-label">Sensitivity</div>
+      </div>
+      <div class="research-stat">
+        <div class="research-stat-val">85.29%</div>
+        <div class="research-stat-label">Specificity</div>
+      </div>
+      <div class="research-stat">
+        <div class="research-stat-val">94.06%</div>
+        <div class="research-stat-label">F-Measure</div>
+      </div>
+    </div>
+    <a href="https://ieeexplore.ieee.org/document/9012461" target="_blank" class="research-link">
+      View on IEEE Xplore →
+    </a>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="about" style="background:var(--navy-card); max-width:100%; border-top:1px solid var(--navy-border); border-bottom:1px solid var(--navy-border);">
+  <div style="max-width:1100px; margin:0 auto;">
+    <p class="section-eyebrow">// Education</p>
+    <h2 class="section-title">Academic Background</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-degree">Master of Science, Computer Science</div>
+        <div class="edu-school">Kent State University</div>
+        <div class="edu-detail">Specialization: Data Analytics · May 2021 · Kent, OH</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">Bachelor of Information Science & Technology</div>
+        <div class="edu-school">Visvesvaraya Technological University</div>
+        <div class="edu-detail">Information Technology · August 2018 · India</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div id="contact">
+  <h2>Let's Connect</h2>
+  <p>Open to Data Engineer and Data Analyst opportunities. Based in Dallas, TX.</p>
+  <div class="contact-links">
+    <a href="mailto:harshitharprasad1996@gmail.com" class="contact-link">
+      ✉ harshitharprasad1996@gmail.com
+    </a>
+    <a href="https://linkedin.com/in/harshitha-prasad-1709" target="_blank" class="contact-link">
+      🔗 LinkedIn
+    </a>
+    <a href="tel:+12348178692" class="contact-link">
+      ☎ 234-817-8692
+    </a>
+    <a href="https://ieeexplore.ieee.org/document/9012461" target="_blank" class="contact-link">
+      📄 IEEE Paper
+    </a>
+  </div>
+</div>
+
+<footer>
+  © 2026 Harshitha Prasad · Data Engineer · Dallas, TX
+</footer>
+
+<script>
+  // Animated pipeline/data-flow canvas
+  const canvas = document.getElementById('pipeline-canvas');
+  const ctx = canvas.getContext('2d');
+  let nodes = [], particles = [], animId;
+
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+
+  function initNodes() {
+    nodes = [];
+    const count = Math.floor(canvas.width / 120);
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x: (canvas.width / (count - 1)) * i,
+        y: canvas.height * (0.3 + Math.random() * 0.4),
+        r: 3 + Math.random() * 3,
+      });
+    }
+  }
+
+  function spawnParticle() {
+    if (nodes.length < 2) return;
+    const fromIdx = Math.floor(Math.random() * (nodes.length - 1));
+    particles.push({ fromIdx, t: 0, speed: 0.004 + Math.random() * 0.006 });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const teal = '#00D4C8';
+
+    // Draw edges
+    ctx.strokeStyle = 'rgba(0,212,200,0.15)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < nodes.length - 1; i++) {
+      ctx.beginPath();
+      ctx.moveTo(nodes[i].x, nodes[i].y);
+      ctx.lineTo(nodes[i+1].x, nodes[i+1].y);
+      ctx.stroke();
+    }
+
+    // Draw nodes
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,212,200,0.5)';
+      ctx.fill();
+    });
+
+    // Draw particles
+    particles.forEach((p, idx) => {
+      p.t += p.speed;
+      if (p.t > 1) { particles.splice(idx, 1); return; }
+      const a = nodes[p.fromIdx], b = nodes[p.fromIdx + 1];
+      if (!a || !b) return;
+      const x = a.x + (b.x - a.x) * p.t;
+      const y = a.y + (b.y - a.y) * p.t;
+      ctx.beginPath();
+      ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = teal;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = teal;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    if (Math.random() < 0.06) spawnParticle();
+    animId = requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => {
+    resize(); initNodes();
+  });
+
+  resize(); initNodes(); draw();
+</script>
+
+</body>
+</html>
